@@ -22,6 +22,8 @@ export default Ember.Component.extend({
 	pinBackgroundImageY: 'top',
 	hasBackgroundImage: Ember.computed.notEmpty('backgroundImage'),
 	backgroundIsLoaded: Ember.computed.gt('intrinsicBgWidth', 0),
+	backgroundTransformY: 0,
+	backgroundScale: 1,
 	
 	hasFixedHeight: true,
 	
@@ -29,6 +31,27 @@ export default Ember.Component.extend({
 	
 	didInsertElement: function() {
 		this.get('windowScroll').addListener(this);
+		if (this.get('debug')) {
+			window.windowDidScroll = this.windowDidScroll.bind(this);
+			window.updateLayout = this.updateLayout.bind(this);
+			window.component = this;
+		}
+		
+		var imgs = this.$().find('img'),
+			imgsToLoad = imgs.length,
+			_this = this;
+		if (imgsToLoad) {
+			imgs.each(function() {
+				$(this).on('load', function() {
+					imgsToLoad--;
+					if (imgsToLoad == 0) {
+						_this.updateLayout();
+					}
+				});
+			});
+		}
+		
+		
 	},
 	
 	willDestroyElement: function() {
@@ -59,8 +82,10 @@ export default Ember.Component.extend({
 				this.set('intrinsicBgHeight', $img.height());
 				this.set('intrinsicBgRatio', $img.height() / $img.width());
 				this.set('shouldReloadBackgroundImg', false);
+				if (this.get('debug')) {
+					console.log('image loaded');
+				}
 				this.updateLayout();
-				Ember.run.later(this.updateLayout.bind(this), 100);	// wtf.
 			}.bind(this));
 			$background.append($img);
 		}
@@ -70,9 +95,28 @@ export default Ember.Component.extend({
 		if (!this.get('backgroundImage') && !this.get('height')) {
 			$content.css('position', 'relative');
 		}
+		/*
+		this.$().find('.hyphae').each(function() {
+			var $this = $(this),
+				img = $this.find('img');
+
+			img.on('load', function() {
+				var h = new Hyphae($this, {
+					foodMap: img.attr('src'),
+					// fixedOpacity: 0.1,
+					// branchiness: 0.01,
+					maxWidth: 1,
+					lifetime: 30000,
+					tickRate: 5,
+					moveWithWidth: false
+				});
+				img.css('opacity', 0);
+				h.createTip({ x: img.width() / 2, y: img.height() / 2 });
+			});
+		});
+		*/
 		
 		this.updateLayout();
-		Ember.run.later(this.updateLayout.bind(this), 100);	// wtf.
 	},
 	
 	didUpdateAttrs: function() {
@@ -84,7 +128,7 @@ export default Ember.Component.extend({
 			$background = this.get('$background'),
 			$inner = this.get('$inner'),
 			$content = this.get('$content'),
-			componentSetHeight = this.get('height'),
+			userSetHeight = this.get('height'),
 			
 			parallaxRate = this.get('parallaxRate'),
 			// intrinsicBgWidth = this.get('intrinsicBgWidth'),
@@ -98,23 +142,33 @@ export default Ember.Component.extend({
 
 		// bgScale is relative to 100% of the width of the window, not
 		// relative to the image intrinsic size.
+		/*
 		if (this.get('hasBackgroundImage') && this.get('backgroundIsLoaded')) {
-			bgScale = 1 + (parallaxRate * intrinsicBgRatio);
+			bgScale = 1;
 		
 			if (elementRatio > intrinsicBgRatio + 0.01) {
+				// visible area is taller than the image
 				bgScale = 1 + (elementRatio / intrinsicBgRatio) + (parallaxRate * intrinsicBgRatio);
 			}
+			else if (elementRatio < intrinsicBgRatio - 0.01) {
+				// visible area is shorter than the image
+				bgScale = 1 + parallaxRate
+			}
 		}
+		*/
+		bgScale = 1 + parallaxRate;
+		
+		this.set('backgroundScale', bgScale);
 			
 		// If there is an explicitly set height, either pct of bg or
 		// pixel value.
-		if (componentSetHeight) {
-			if (componentSetHeight.indexOf('%') !== -1 && this.get('intrinsicBgHeight') > 0) {
-				var componentHeightPct = parseInt(componentSetHeight) / 100;
+		if (userSetHeight) {
+			if (userSetHeight.indexOf('%') !== -1 && this.get('intrinsicBgHeight') > 0) {
+				var componentHeightPct = parseInt(userSetHeight) / 100;
 				var maxHeight = Math.min(this.get('intrinsicBgRatio') * $this.width() * componentHeightPct, Ember.$(window).height());
-				if (this.get('debug')) {
-					console.log('maxheight', maxHeight, '...', this.get('intrinsicBgRatio') * $this.width(), componentHeightPct);
-				}
+				// if (this.get('debug')) {
+				// 	console.log('maxheight', maxHeight, '...', this.get('intrinsicBgRatio') * $this.width(), componentHeightPct);
+				// }
 				$inner.css({
 					'min-height': 'inherit',
 					'height': maxHeight + 'px'
@@ -130,47 +184,6 @@ export default Ember.Component.extend({
 			}
 		}
 		
-		if (this.get('hasBackgroundImage') && !this.get('shouldReloadBackgroundImg')) {
-			$background.css({
-				position: 'relative',
-				left: (Math.abs(1 - bgScale) * -50) + '%',
-				width: (bgScale * 100) + '%'
-			});
-			
-			var pinBackgroundImageY = this.get('pinBackgroundImageY');
-			var imgHeight = intrinsicBgRatio * elementWidth * bgScale;
-			// TODO: unifying equation for these
-			switch (pinBackgroundImageY) {
-				case 'top':
-					// default case
-				break;
-				case 'bottom':
-					if (elementRatio < intrinsicBgRatio - 0.01) {
-						$background.css({
-							top: -1 * (imgHeight - elementHeight) + 'px'
-						});
-					}
-					else {
-						$background.css({
-							top: Math.abs(1 - bgScale) * -99.9999 + '%'
-						});
-					}
-				break;
-				case 'center':
-					if (elementRatio < intrinsicBgRatio - 0.01) {
-						$background.css({
-							top: -0.5 * (imgHeight - elementHeight) + 'px'
-						});
-					}
-					else {
-						$background.css({
-							top: Math.abs(1 - bgScale * intrinsicBgRatio) * -50 + '%'
-						});
-					}
-				break;
-			}
-		}
-		
 		$content.css({
 			top: ($this.height() / 2) - ($content.height() / 2) + 'px'
 		});
@@ -178,29 +191,80 @@ export default Ember.Component.extend({
 		var cols = $this.find('.col');
 		if (cols.length) {
 			// var colContainer = $this.find('.col-container');
-			cols.each(function() {
-				Ember.$(this).css('width', (100 / cols.length) + '%');
-			});
+			if ($this.parents('.phones').length) {
+				cols.each(function() {
+					Ember.$(this).css('width', '100%');
+				});
+			}
+			else {
+				cols.each(function() {
+					Ember.$(this).css('width', (100 / cols.length) + '%');
+				});
+			}
 		}
-		
+		this.notifyPropertyChange('innerOffsetTop');
 		this.windowDidScroll();
 	},
 	
-	windowDidScroll: function(scrollTop) {
+	innerOffsetTop: function() {	
+		return this.get('$inner').offset().top 
+	}.property(),
+	
+	windowDidScroll: function(windowScrollTop) {
 		
-		scrollTop = scrollTop || Ember.$(window).scrollTop();
+		windowScrollTop = windowScrollTop || Ember.$(window).scrollTop();
 		
 		var $background = this.get('$background'),
+			documentOffset = $background.offset().top,
+			$inner = this.get('$inner'),
 			windowHeight = Ember.$(window).height(),
-			// elementWidth = $this.width(),
-			elementOffset = $background.offset().top,
 			parallaxRate = this.get('parallaxRate'),
-			onscreenOffset = scrollTop - elementOffset + windowHeight,
-			baseOffset = windowHeight * parallaxRate;
+			innerOffsetTop = this.get('innerOffsetTop'),
+			windowScrollTop = Ember.$(window).scrollTop(),
+			componentHeight = $inner.height(),
+			componentWidth = $inner.width(),
+			
+			elementWindowTopDelta = windowScrollTop - innerOffsetTop,
+			elementWindowBottomDelta = elementWindowTopDelta + windowHeight,
+			isOnscreen = elementWindowBottomDelta >= 0 && elementWindowTopDelta - componentHeight <= 0,
+			
+			backgroundScale = this.get('backgroundScale'),
+			intrinsicBgRatio = this.get('intrinsicBgRatio'),
+			
+			renderedBgHeight = (backgroundScale * intrinsicBgRatio * componentWidth),
+			
+			travel = renderedBgHeight - componentHeight,
+			backgroundTransformY = 0;
+
+			if (isOnscreen) {
+				backgroundTransformY = travel * (elementWindowTopDelta / windowHeight);
+				
+				switch (this.get('pinBackgroundImageY')) {	
+					case 'bottom':
+						backgroundTransformY -= (travel / 2) - 2;
+					break;
+					case 'top':
+						backgroundTransformY += (travel / 2);
+					break;
+				}
+				
+				$background.css({
+					transform: 'translate3d(0px, ' + backgroundTransformY + 'px, 0px) scale(' + this.get('backgroundScale') + ')'
+					// 'transform': 'translateY(' + backgroundTransformY + 'px)'
+				});
+			}
 		
-		$background.css({
-			'transform': 'translateY(' + ((onscreenOffset * parallaxRate) - baseOffset) + 'px)'
-		});
+		// if (this.get('debug')) {
+		// 	console.log({
+		// 		travel: travel,
+		// 		ratio: elementWindowTopDelta / windowHeight,
+		// 		newTransform: backgroundTransformY
+		// 	});
+		// }
+			
+		this.set('backgroundTransformY', backgroundTransformY);
+		
+		
 	},
 	
 	windowDidResize: function() {

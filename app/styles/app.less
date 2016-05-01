@@ -30,6 +30,7 @@ body {
 		left: 0;
 		img {
 			width:100%;
+			// position:fixed;
 		}
 	}
 	
@@ -76,7 +77,7 @@ body {
 				
 				@media @phones {
 					font-size:1.3em;
-					line-height: 1em;
+					line-height: 1.25em;
 				}
 			}
 		}
@@ -100,26 +101,78 @@ body {
 			p, h1, h2, h3 {
 				width:100%;
 			}
+			
+			@media @phones {
+				margin-top:2em;
+			}
+			
+			&:first-child {
+				@media @phones {
+					margin-top:0;
+				}
+			}
 		}
 	}
 	
 	&.header { 
-		.content-block-content {
+		.header-container {
+			width:900px;
+			overflow: hidden;
+			margin: 0 auto;
+			
+			@media @tablets {
+				width: 460px;
+			}
+			@media @phones {
+				width: 260px;
+			}
+			
+			div, h1 {
+				float:left;
+			}
+			
 			h1 {
-				font-size: 5em;
+				font-size: 4em;
 				font-family: "CrystalSkyCaps", cursive, serif;
 				color: white;
 				text-align:center;
 				margin: 0 auto;
 				
+				width:500px;
+				
 				@media @tablets {
-					font-size:3em;
+					font-size:2.5em;
+					width: 300px;
 				}
 				
 				@media @phones {
-					font-size:2em;
+					font-size:1.8em;
+					width: 200px;
+				}
+			}
+			
+			.doodle {
+				margin-top:5px;
+				width:150px;
+				img {
+					width:100%;
+				}
+				
+				@media @tablets {
+					width: 80px;
+				}
+				@media @phones {
+					width: 30px;
 				}
 			}
 		}
 	}
+}
+#debug-canvas {
+	position: fixed;
+	bottom:0;
+	left:0;
+	width:250px;
+	height:150px;
+	
 }
