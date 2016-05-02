@@ -8,6 +8,16 @@ body {
 	margin:0;
 	font-family: "Open Sans", Helvetica, sans-serif;
 	color:#eae8ff;
+	background:black;
+}
+
+a, a:visited, a:hover {
+	color:#aabbff;
+	text-decoration: none;
+}
+
+a:hover {
+	color:orange;
 }
 
 .content-block {
@@ -21,7 +31,21 @@ body {
 	
 	.content-block-inner {
 		width:100%;
-		min-height:400px;
+		
+		&.auto-height {
+			padding:2em 0;
+			height: auto;
+			
+			.content-block-content {
+				position:relative;
+			}
+		}
+		// min-height:400px;
+		// padding: 2em 0;
+		// 
+		// &.no-padding {
+		// 	padding:0;
+		// }
 	}
 	
 	.content-block-background {
@@ -40,11 +64,21 @@ body {
 		left:0;
 		width:100%;
 		
-		p, h1, h2, h3 {
+		p, h1, h2, h3, blockquote {
 			margin: 0 auto;
 			width:80%;
-			max-width: 800px;
+			max-width: 700px;
 			text-align: center;
+			strong {
+				color:orange;	
+			}
+		}
+		
+		blockquote {
+			text-align: justify;
+		}
+		.attribution {
+			text-align: right;
 		}
 		
 		h1, h2, h3 {
@@ -66,20 +100,23 @@ body {
 			}
 			
 			&.highlight {
-				font-size: 1.3em;
+				font-size: 1.5em;
 				font-family: "Josefin Sans", "Open Sans", Helvetica, sans-serif;
 				font-weight: 300;
 				line-height: 1.5em;
-				
-				strong {
-					color: white;
-				}
 				
 				@media @phones {
 					font-size:1.3em;
 					line-height: 1.25em;
 				}
 			}
+			
+			&.justified {
+				text-align: justify;
+			}
+		}
+		p + p {
+			margin-top:1em;
 		}
 		
 		.col-container {
@@ -112,11 +149,31 @@ body {
 				}
 			}
 		}
+		
+		.col-container.col-2 {
+			.col {
+				width: 50%;
+				
+				@media @phones {
+					width:100%;
+				}
+			}
+		}
+		
+		.col-container.col-3 {
+			.col {
+				width: 33.333333%;
+				
+				@media @phones {
+					width:100%;
+				}
+			}
+		}
 	}
 	
 	&.header { 
 		.header-container {
-			width:900px;
+			width:800px;
 			overflow: hidden;
 			margin: 0 auto;
 			
@@ -175,4 +232,16 @@ body {
 	width:250px;
 	height:150px;
 	
+}
+.social-links {
+	margin: 0 auto;
+	width: 280px;
+	overflow: hidden;
+	padding: 0;
+	li {
+		font-size:2em;
+		padding: 1em;
+		float:left;
+		display:block;
+	}
 }

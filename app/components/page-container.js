@@ -49,5 +49,6 @@ export default Ember.Component.extend({
 			$this.addClass('mobile');
 			$this.addClass(narrowestBp.name);
 		}
+		console.log('updated page resize');
 	}
 });
