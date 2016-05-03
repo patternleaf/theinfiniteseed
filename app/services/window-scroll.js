@@ -48,5 +48,10 @@ export default Ember.Service.extend({
 	
 	removeListener: function(listener) {
 		this.get('listeners').removeObject(listener);
+	},
+	
+	triggerUpdates: function() {
+		this.handleResize();
+		this.handleScroll();
 	}
 });

@@ -85,7 +85,8 @@ export default Ember.Component.extend({
 				if (this.get('debug')) {
 					console.log('image loaded');
 				}
-				this.updateLayout();
+				// this.updateLayout();
+				this.get('windowScroll').triggerUpdates();
 			}.bind(this));
 			$background.append($img);
 		}
