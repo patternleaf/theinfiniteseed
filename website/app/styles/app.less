@@ -69,7 +69,7 @@ a:hover {
 			width:80%;
 			max-width: 700px;
 			text-align: center;
-			strong {
+			strong.very-strong {
 				color:orange;	
 			}
 		}
@@ -225,6 +225,7 @@ a:hover {
 		}
 	}
 }
+
 #debug-canvas {
 	position: fixed;
 	bottom:0;
@@ -233,6 +234,7 @@ a:hover {
 	height:150px;
 	
 }
+
 .social-links {
 	margin: 0 auto;
 	width: 280px;
@@ -243,5 +245,41 @@ a:hover {
 		padding: 1em;
 		float:left;
 		display:block;
+	}
+}
+.content-block .content-block-content .team-members {
+	padding:0;
+	margin: 0;
+	li {
+		list-style:none;
+		overflow: hidden;
+		margin-bottom: 1.5em;
+		
+		.bio-pic {
+			max-width:100px;
+			width:15%;
+			height:100px;
+			float:left;
+			padding-right:4px;
+			img {
+				width:50px;
+				height:50px;
+				margin:0;
+				border:1px solid #666;
+			}
+		}
+		
+		.bio-text {
+			.member-name {
+				font-weight:700;
+				color:orange;
+				margin-top:-5px;	// ??
+			}
+			float:left;
+			width: 85%;
+			.member-bio-short {
+				text-align: justify;
+			}
+		}
 	}
 }
