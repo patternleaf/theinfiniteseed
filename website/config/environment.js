@@ -19,7 +19,7 @@ module.exports = function(environment) {
   },
   
   googleFonts: [
-      'Open+Sans:300',
+      'Open+Sans:300,700',
     //   'Roboto:300',
       'Josefin+Sans:400,300,700'
     ],

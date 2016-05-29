@@ -106,7 +106,25 @@
 		</p>
 	{{/content-block}}
 	
-	{{#content-block backgroundGradient="dark-blue-gradient-2"}}
+	{{#content-block backgroundGradient="dark-blue-gradient-2" height=500}}
+		<h2>Partners</h2>
+		<ul class="partners-list">
+			<li class="partner-logo storyline-studios">Storyline Studios</li>
+			<li class="partner-logo murphy-design">Murphy Design</li>
+			<li class="partner-logo collective-culture">Collective Culture</li>
+			<li class="partner-logo base-io">Base.io</li>
+			<li class="partner-logo patternleaf">Patternleaf</li>
+			<li class="partner-logo soce">School of Critical Engagement</li>
+			<li class="partner-logo space-group">Space Group</li>
+			<li class="partner-logo place">PLACE</li>
+			<li class="partner-logo instaar">Institute for Arctic and Alpine Research</li>
+			<li class="partner-logo ncar">National Center for Atmospheric Research</li>
+			<li class="partner-logo norwegian-polar-institute">Norwegian Polar Institute</li>
+			<li class="partner-logo rnmfa">Royal Norwegian Ministry of Foreign Affairs</li>
+			<li class="partner-logo nortana">NORTANA</li>
+			<li class="partner-logo crop-trust">Crop Trust</li>
+		</ul>
+		{{!-- 
 		<h2>Resources</h2>
 		<p>(We don't need these images for this section ... this is just a possiblity of layout illustrated if it makes sense somewhere.)</p>
 		<div class="col-container col-2">
@@ -119,6 +137,7 @@
 				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
 			</div>
 		</div>
+		--}}
 	{{/content-block}}
 	
 	{{#content-block backgroundImage="/img/DSC_2072k.jpg" height="100%"}}
@@ -134,11 +153,11 @@
 		<p>
 			Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
 		</p>
-		<ul class="social-links">
-			<li class="facebook"><a href=" https://www.facebook.com/The-Infinite-Seed-724600177681809/">{{fa-icon "facebook"}}</a></li>
-			<li class="twitter"><a href="https://twitter.com/theinfiniteseed">{{fa-icon "twitter"}}</a></li>
-			<li class="instagram"><a href="https://www.instagram.com/theinfiniteseed/">{{fa-icon "instagram"}}</a></li>
-		</ul>
+		{{social-links
+			facebook="https://www.facebook.com/The-Infinite-Seed-724600177681809/"
+			twitter="https://twitter.com/theinfiniteseed"
+			instagram="https://www.instagram.com/theinfiniteseed/"
+		}}
 
 	{{/content-block}}
 	
@@ -146,87 +165,14 @@
 		<h2>Who Are We?</h2>
 		<p>
 			<strong>The Infinite Seed</strong> is a global inter-disciplinary 
-			team of artists, engineers, and thinkers with hundreds of years
-			combined experience making, educating, engineering, playing,
-			grieving, and exploring the brilliance and the darkness 
-			of the human condition.
+			team of artists, scientists, filmmakers, entrepreneurs, engineers 
+			and thinkers  with hundreds of years combined experience making, 
+			educating, playing, grieving, and exploring the brilliance and 
+			the darkness of the human condition.
 		</p>
-		<div class="col-container col-2">
-			<div class="col">
-				<ul class="team-members">
-					<li>
-						<div class="bio-pic">
-							<img src="">
-						</div>
-						<div class="bio-text">
-							<div class="member-name">Team Member</div>
-							<p class="member-bio-short">
-								Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-							</p>
-						</div>
-					</li>
-					<li>
-						<div class="bio-pic">
-							<img src="">
-						</div>
-						<div class="bio-text">
-							<div class="member-name">Team Member</div>
-							<p class="member-bio-short">
-								Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-							</p>
-						</div>
-					</li>
-					<li>
-						<div class="bio-pic">
-							<img src="">
-						</div>
-						<div class="bio-text">
-							<div class="member-name">Team Member</div>
-							<p class="member-bio-short">
-								Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-							</p>
-						</div>
-					</li>
-				</ul>
-			</div>
-			<div class="col">
-				<ul class="team-members">
-					<li>
-						<div class="bio-pic">
-							<img src="">
-						</div>
-						<div class="bio-text">
-							<div class="member-name">Team Member</div>
-							<p class="member-bio-short">
-								Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-							</p>
-						</div>
-					</li>
-					<li>
-						<div class="bio-pic">
-							<img src="">
-						</div>
-						<div class="bio-text">
-							<div class="member-name">Team Member</div>
-							<p class="member-bio-short">
-								Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-							</p>
-						</div>
-					</li>
-					<li>
-						<div class="bio-pic">
-							<img src="">
-						</div>
-						<div class="bio-text">
-							<div class="member-name">Team Member</div>
-							<p class="member-bio-short">
-								Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-							</p>
-						</div>
-					</li>
-				</ul>
-			</div>
-		</div>
+
+		{{bio-display people=people}}
+
 	{{/content-block}}
 	
 {{/page-container}}

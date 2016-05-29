@@ -1,0 +1,45 @@
+{{#if selectedPerson}}
+	<ul class="tabs">
+		<li class="bio {{if (eq selectedTab 'bio') "selected"}}" {{action "selectTab" 'bio'}}>Bio</li>
+		<li class="meta {{if (eq selectedTab 'meta') "selected"}}" {{action "selectTab" 'meta'}}>Meta</li>
+	</ul>
+	<div class="tab-content bio {{if (eq selectedTab 'bio') "selected"}}">
+		<div class="bio-pic">
+			<img src="{{selectedPerson.imageUrl}}">
+		</div>
+		
+		<div class="bio-text">
+			<div class="member-name"><strong>{{{selectedPerson.name}}}</strong> </div>
+			<div class="member-title">{{{selectedPerson.title}}}</div>
+			<p class="member-bio">
+				{{selectedPerson.bio}}
+			</p>
+		</div>
+	</div>
+	<div class="tab-content meta {{if (eq selectedTab 'meta') "selected"}}">
+		<div class="map-container">
+			{{#is-leaflet-map center=selectedPerson.mapCenter zoom=3 shouldInvalidateSize=(eq selectedTab 'meta')}}
+				
+				{{tile-layer url="http://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png"}}
+				
+				{{#each selectedPerson.locations as |location|}}
+					{{#marker-layer location=location.location}}
+						<p>{{location.name}}</p>
+					{{/marker-layer}}
+				{{/each}}
+				
+			{{/is-leaflet-map}}
+		</div>
+		<ul class="member-locations">
+			{{#each selectedPerson.locations as |location|}}
+				<li {{action "updateActiveMarker" selectedPerson location}}>{{location.name}}</li>
+			{{/each}}
+		</ul>
+		{{social-links
+			facebook=selectedPerson.social.facebook
+			twitter=selectedPerson.social.twitter
+			instagram=selectedPerson.social.instagram
+		}}
+	</div>
+	
+{{/if}}

@@ -1,0 +1,24 @@
+<div class="col-container col-2 full-width-on-phones">
+	<div class="col bio-display-list">
+		<ul>
+		{{#each people as |person|}}
+			<li class="bio-display-person {{if person.isSelected "selected"}}">
+				<div class="bio-pic">
+					<img src="{{person.imageUrl}}">
+				</div>
+				<div class="bio-text">
+					<div class="member-name"><strong>{{{person.name}}}</strong> {{{person.title}}}</div>
+				</div>
+				{{#if person.isSelected}}
+					<div class="phones-only">
+						{{bio-display-detail selectedPerson=selectedPerson}}
+					</div>
+				{{/if}}
+			</li>
+		{{/each}}
+		</ul>
+	</div>
+	<div class="col flush-left non-phones-only">
+		{{bio-display-detail selectedPerson=selectedPerson}}
+	</div>
+</div>
